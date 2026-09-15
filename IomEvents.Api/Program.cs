@@ -10,14 +10,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// 3. API & Swagger Services
+// 3. Register HttpClient and Scraper Service
+builder.Services.AddHttpClient<IEventScraper, SampleEventScraper>();
+
+// 4 API & Swagger Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
-// 4. Configure HTTP request pipeline
+// 5. Configure HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -27,5 +31,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+Console.WriteLine("\n==================================================");
+Console.WriteLine(" View docs here: https://localhost:7019/swagger");
+Console.WriteLine("==================================================\n");
 
 app.Run();

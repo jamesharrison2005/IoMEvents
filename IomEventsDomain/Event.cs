@@ -11,7 +11,7 @@ namespace IomEvents.Domain
         public String description { get; set; } = string.Empty;
         public DateTime startDate { get; set; }
         public String location { get; set; } = string.Empty;
-        public String Category { get; set; } = string.Empty;
-        public String SourceUrl { get; set; } = string.Empty;
+        public String category { get; set; } = string.Empty;
+        public String sourceUrl { get; set; } = string.Empty;
     }
 }

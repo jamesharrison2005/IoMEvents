@@ -36,4 +36,13 @@ public class EventsController : ControllerBase
 
         return @event;
     }
+
+    // POST: api/events/scrape
+    [HttpPost("scrape")]
+    public async Task<IActionResult> ScrapeAndSave([FromServices] IEventScraper scraper)
+    {
+        var events = await scraper.ScrapeEventsAsync();
+
+        return Ok(new { Count = events.Count, Events = events });
+    }
 }
