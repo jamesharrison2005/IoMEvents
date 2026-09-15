@@ -1,0 +1,12 @@
+
+.vs/
+[Bb]in/
+[Ob]bj/
+appsettings.Development.json
+*.user
+*.userosscache
+*.sln.docstates
+
+## Ignore OS-generated files
+.DS_Store
+Thumbs.db

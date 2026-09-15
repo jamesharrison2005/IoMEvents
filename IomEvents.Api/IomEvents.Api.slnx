@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="../IomEvents.Infrastructure/IomEvents.Infrastructure.csproj" />
   <Project Path="../IomEventsApplication/IomEvents.Application.csproj" />
   <Project Path="../IomEventsDomain/IomEvents.Domain.csproj" />
