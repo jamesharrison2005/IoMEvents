@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IomEvents.Domain
 {
-    internal class Event
+    public class Event
     {
         public Guid id { get; set; }
         public String title { get; set; } = string.Empty;
