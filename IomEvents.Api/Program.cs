@@ -1,19 +1,23 @@
 using IomEvents.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
+int PORT = 7019;
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 2. DbContext
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
+
 
 // 3. Register HttpClient and Scraper Service
 builder.Services.AddHttpClient<IEventScraper, SampleEventScraper>();
 
-// 4 API & Swagger Services
+// 4. Register background scraping worker (periodic upsert worker)
+builder.Services.AddHostedService<ScrapeBackgroundService>();
+
+// 5 API & Swagger Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,7 +25,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// 5. Configure HTTP request pipeline
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -33,7 +37,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 Console.WriteLine("\n==================================================");
-Console.WriteLine(" View docs here: https://localhost:7019/swagger");
+Console.WriteLine(" View docs here: https://localhost:" + PORT + "/swagger");
 Console.WriteLine("==================================================\n");
 
 app.Run();
