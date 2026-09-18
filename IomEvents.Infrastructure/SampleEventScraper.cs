@@ -127,13 +127,27 @@ public class SampleEventScraper : IEventScraper
                 }
 
                 // Location
-                var location = d.DocumentNode.SelectSingleNode("//*[contains(@class,'location')]//p")?.InnerText.Trim()
-                               ?? d.DocumentNode.SelectSingleNode("//*[contains(@class,'location')]")?.InnerText.Trim()
-                               ?? "Isle of Man";
+                var location = "Isle of Man";
+                var bodyText = d.DocumentNode.InnerText;
+                var addressMatch = System.Text.RegularExpressions.Regex.Match(
+                    bodyText, @"[A-Za-z0-9'&.\-]+(?:,\s*[A-Za-z0-9'&.\-]+){1,4},?\s*IM\d{1,2}\s?\d[A-Z]{2}");
+                if (addressMatch.Success)
+                {
+                    var matchedTown = IomTowns.All.FirstOrDefault(town =>
+                        addressMatch.Value.Contains(town, StringComparison.OrdinalIgnoreCase));
+                    if (matchedTown != null)
+                        location = matchedTown;
+                }
 
                 // Category
-                var category = d.DocumentNode.SelectSingleNode("//*[contains(@class,'category')]")?.InnerText.Trim() ?? "General";
-
+                var category = "General";
+                var headingNodes = d.DocumentNode.SelectNodes("//h1|//h2|//h3|//h4") ?? Enumerable.Empty<HtmlNode>();
+                var typeHeading = headingNodes.FirstOrDefault(n =>
+                    System.Text.RegularExpressions.Regex.IsMatch(n.InnerText.Trim(), @"^Type:\S"));
+                if (typeHeading != null)
+                {
+                    category = typeHeading.InnerText.Trim().Substring("Type:".Length).Trim();
+                }
                 events.Add(new Event
                 {
                     id = Guid.NewGuid(),

@@ -60,7 +60,7 @@ public class ScrapeBackgroundService : BackgroundService
 
                     foreach (var item in scraped)
                     {
-                        Event match = null;
+                        Event? match = null;
 
                         if (!string.IsNullOrEmpty(item.sourceUrl))
                         {
